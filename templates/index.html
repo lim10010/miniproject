@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Team Introduction</title>
+    <style>
+        /* 웹사이트 배경색상 */
+        body {
+            background-color: black;
+            color: white;
+        }
+
+        /* 화면 상단 네브바 배경사진 */
+        .navbar {
+            background-image: url("{{ url_for('static', filename='images/navbar_img.png') }}");
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+
+        .content h1 {
+            color: white;
+            text-align: center;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        /* 화면 중앙 카드사진 클릭요소 */
+
+        .centered-image {
+            text-align: center;
+            margin-top: 50px;
+            /* 사진을 화면 중앙에 위치시키기 위한 여백 설정 */
+        }
+
+        .centered-image img {
+            width: 400px;
+            height: auto;
+            cursor: pointer;
+        }
+
+        /* 모달 스타일 */
+        .modal {
+            display: none;
+            /* 모달 초기에는 숨김 */
+            position: fixed;
+            z-index: 1;
+            /* 모달을 다른 요소들 위에 표시 */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            /* 내용이 넘칠 경우 스크롤 가능 */
+            background-color: rgba(0, 0, 0, 0.8);
+            /* 배경을 반투명 검은색으로 설정 */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            /* 모달을 화면 중앙에 위치시킴 */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            /* 모달 최대 너비 설정 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="navbar-content">
+        </div>
+    </nav>
+
+    <div class="content">
+        <h1>새로운 도전과 여정을 시작하는 여행자들</h1>
+        <div class="centered-image">
+            <img src="{{ url_for('static', filename='images/cards_img.png') }}" alt="Card Image" id="card-image">
+        </div>
+        <!-- 모달 -->
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>축하합니다!!</h2><br>
+                <!-- 입력 폼을 여기에 추가 -->
+                <form action="/submit-info" method="post">
+                    <label for="name">당신의 이름</label><br>
+                    <input type="text" id="name" name="name"><br><br>
+                    <label for="mbti">MBTI 성향</label><br>
+                    <input type="text" id="mbti" name="mbti"><br><br>
+                    <label for="class_name">부트캠프 과정명</label><br>
+                    <input type="text" id="class_name" name="class_name"><br><br>
+                    <label for="feeling">여행을 앞둔 심정</label><br>
+                    <input type="text" id="feeling" name="feeling"><br><br>
+                    <label for="moto">인생의 모토</label><br>
+                    <input type="text" id="moto" name="moto"><br><br>
+                    <input type="submit" value="제출">
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <h2>티켓 소지중인 여행자들</h2>
+    <ul>
+        {% for member in team %}
+        <li>
+            <h3>{{ member.name }}</h3>
+            <p>MBTI: {{ member.mbti }}</p>
+            <p>부트캠프 과정: {{ member.class_name }}</p>
+            <p>여행 심정: {{ member.feeling }}</p>
+            <p>인생의 모토: {{ member.moto }}</p>
+        </li>
+        {% endfor %}
+    </ul>
+    </div>
+
+
+    <script>
+        // 모달 창 열기
+        var modal = document.getElementById("myModal");
+        var img = document.getElementById("card-image");
+        img.onclick = function () {
+            modal.style.display = "block";
+        }
+
+        // 모달 창 닫기
+        function closeModal() {
+            modal.style.display = "none";
+        }
+
+        // 모달 외부 클릭 시 모달 닫기
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+
+</html>
